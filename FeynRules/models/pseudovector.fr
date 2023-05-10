@@ -1,0 +1,137 @@
+(***************************************************************************************************************)
+(******                       This is the FeynRules mod-file for a pseudovector, Y,  interacting with a muon.                       ******)
+(******                                                                                                   ******)
+(******     Authors: S. Alipour-fard                                                     ******)
+(***************************************************************************************************************)
+
+
+(* ************************** *)
+(* *****  Information   ***** *)
+(* ************************** *)
+M$ModelName = "Beam Dump Pseudo-Vector";
+
+M$Information = {
+  Authors      -> {"S. Alipour-fard"},
+  Emails       -> {"samuelaf@mit.edu"}
+};
+
+
+(* ************************** *)
+(* *****   Parameters   ***** *)
+(* ************************** *)
+FeynmanGauge = True;
+
+IndexRange[Index[Generation]] = Range[2];
+IndexStyle[Generation, f];
+
+
+M$Parameters = {
+  ee == {
+    ParameterType    -> Internal,
+    InteractionOrder -> {QED,1},
+    TeX              -> e,
+    Description      -> "Electric coupling constant"
+  },
+  gel == {
+    ParameterType -> External,
+    InteractionOrder -> {BSM,1},
+    TeX           -> Subscript[g, e],
+    Description   -> "Coupling between Y and the electron."
+  },
+  gmu == {
+    ParameterType -> External,
+    InteractionOrder -> {BSM,1},
+    TeX           -> Subscript[g, mu],
+    Description   -> "Coupling between Y and the muon."
+  },
+  FFnuclidescalar == {
+    ParameterType -> External,
+    InteractionOrder -> {Nuclear,1},
+    TeX           -> Subscript[F, scalar],
+    Description   -> "A form factor modifying the effective charge for the ``scalar-like'' nuclide-photon interaction."
+  },
+  FFnuclidefermion == {
+    ParameterType -> External,
+    InteractionOrder -> {Nuclear,1},
+    TeX           -> Subscript[F, fermion],
+    Description   -> "A form factor modifying the effective charge for the ``fermion-like'' nuclide-photon interaction."
+  }
+};
+
+
+(* ************************** *)
+(* *****  Gauge groups  ***** *)
+(* ************************** *)
+M$GaugeGroups = {
+  U1EM  == {
+    Abelian          -> True,
+    CouplingConstant -> ee,
+    GaugeBoson       -> A,
+    Charge           -> Q
+  }
+};
+
+
+(* ************************** *)
+(* **** Particle classes **** *)
+(* ************************** *)
+M$ClassesDescription = {
+(* Gauge bosons: physical vector fields *)
+  V[1] == {
+    ClassName       -> A,
+    SelfConjugate   -> True,
+    Mass            -> 0,
+    PDG             -> 22,
+	PropagatorLabel  -> "gamma",
+    PropagatorType  -> W,
+    PropagatorArrow -> None,
+    FullName        -> "Photon"
+  },
+
+(* Fermions: physical fields *)
+  F[1] == {
+    ClassName        -> l,
+    ClassMembers     -> {e, mu},
+    SelfConjugate    -> False,
+	Indices          -> {Index[Generation]},
+    FlavorIndex      -> Generation,
+	Mass             -> {Ml, {mel, 5.11*^-4}, {mmu, 0.10566}},
+    Width            -> 0,
+    QuantumNumbers   -> {Q -> -1},
+    PropagatorLabel  -> {"l", "e", "mu"},
+    PropagatorType   -> Straight,
+    PropagatorArrow  -> Forward,
+    PDG              -> {11, 13},
+    ParticleName     -> {"e-", "mu-"},
+    AntiParticleName -> {"e+", "mu+"},
+    FullName         -> {"Electron", "Muon"}
+  },
+
+(* BSM Pseudo-Vector *)
+  V[2] == {
+    ClassName       -> Y,
+    SelfConjugate   -> True,
+    Mass            -> {mY, 1000},
+    Width           -> 0,
+    PropagatorLabel -> "Y",
+    PropagatorType  -> W,
+    PropagatorArrow -> None,
+    PDG             -> 999,
+    ParticleName    -> "Y",
+    FullName        -> "BSM Pseudo-Vector"
+  }
+};
+
+
+(* ************************** *)
+(* *****   Lagrangian   ***** *)
+(* ************************** *)
+LQED := -1/4 FS[A,mu,nu] FS[A,mu,nu] + I lbar.Ga[mu].DC[l, mu] - Ml[iflav] lbar[s, iflav].l[s, iflav];
+
+LPVectorKinetic :=  -1/4 FS[Y,mu,nu] FS[Y,mu,nu] + 1/2 mY^2 Y[mu] Y[mu];
+
+LPVectorCoupling := -I gel ebar.Ga[nu].Ga[5].e Y[nu] - I gmu mubar.Ga[nu].Ga[5].mu Y[nu];
+
+LPseudoVector := LPVectorKinetic + LPVectorMass + LPVectorCoupling
+
+LPseudoVectorTot = LQED + LPseudoVector;

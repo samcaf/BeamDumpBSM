@@ -1,0 +1,127 @@
+(***************************************************************************************************************)
+(******                       This is the FeynRules mod-file for a scalar, S, interacting with a muon                       ******)
+(******                                                                                                   ******)
+(******     Authors: S. Alipour-fard                                                     ******)
+(***************************************************************************************************************)
+
+
+(* ************************** *)
+(* *****  Information   ***** *)
+(* ************************** *)
+M$ModelName = "Beam Dump Scalar";
+
+M$Information = {
+  Authors      -> {"S. Alipour-fard"},
+  Emails       -> {"samuelaf@mit.edu"}
+};
+
+
+(* ************************** *)
+(* *****   Parameters   ***** *)
+(* ************************** *)
+FeynmanGauge = True;
+
+IndexRange[Index[Generation]] = Range[2];
+IndexStyle[Generation, f];
+
+
+M$Parameters = {
+  ee == {
+    ParameterType    -> Internal,
+    InteractionOrder -> {QED,1},
+    TeX              -> e,
+    Description      -> "Electric coupling constant"
+  },
+  ySe == {
+    ParameterType -> External,
+    InteractionOrder -> {BSM,1},
+    TeX           -> Subscript[y, e],
+    Description   -> "Yukawa coupling between S and the electron."
+  },
+  ySmu == {
+    ParameterType -> External,
+    InteractionOrder -> {BSM,1},
+    TeX           -> Subscript[y, mu],
+    Description   -> "Yukawa coupling between S and the muon."
+  }
+};
+
+
+(* ************************** *)
+(* *****  Gauge groups  ***** *)
+(* ************************** *)
+M$GaugeGroups = {
+  U1EM  == {
+    Abelian          -> True,
+    CouplingConstant -> ee,
+    GaugeBoson       -> A,
+    Charge           -> Q
+  }
+};
+
+
+(* ************************** *)
+(* **** Particle classes **** *)
+(* ************************** *)
+M$ClassesDescription = {
+(* Gauge bosons: physical vector fields *)
+  V[1] == {
+    ClassName       -> A,
+    SelfConjugate   -> True,
+    Mass            -> 0,
+    PDG             -> 22,
+	PropagatorLabel  -> "gamma",
+    PropagatorType  -> W,
+    PropagatorArrow -> None,
+    FullName        -> "Photon"
+  },
+  (* May want to add Z boson *)
+
+(* Fermions: physical fields *)
+  F[1] == {
+    ClassName        -> l,
+    ClassMembers     -> {e, mu},
+    SelfConjugate    -> False,
+	Indices          -> {Index[Generation]},
+    FlavorIndex      -> Generation,
+	Mass             -> {Ml, {mel, 5.11*^-4}, {mmu, 0.10566}},
+    Width            -> 0,
+    QuantumNumbers   -> {Q -> -1},
+    PropagatorLabel  -> {"l", "e", "mu"},
+    PropagatorType   -> Straight,
+    PropagatorArrow  -> Forward,
+    PDG              -> {11, 13},
+    ParticleName     -> {"e-", "mu-"},
+    AntiParticleName -> {"e+", "mu+"},
+    FullName         -> {"Electron", "Muon"}
+  },
+
+(* BSM Scalar *)
+  S[1] == {
+    ClassName       -> S,
+    SelfConjugate   -> True,
+    Mass            -> {mS, 1000},
+    Width           -> 0,
+    PropagatorLabel -> "S",
+    PropagatorType  -> D,
+    PropagatorArrow -> None,
+    PDG             -> 996,
+    ParticleName    -> "S",
+    FullName        -> "BSM Scalar"
+  }
+};
+
+
+(* ************************** *)
+(* *****   Lagrangian   ***** *)
+(* ************************** *)
+LQED := -1/4 FS[A,mu,nu] FS[A,mu,nu] + I lbar.Ga[mu].DC[l, mu] - Ml[iflav] lbar[s, iflav].l[s, iflav];
+
+LScalarKinetic := Block[{mu},
+  ExpandIndices[1/2 del[S, mu] del[S, mu] - 1/2 mS^2*S^2]];
+
+LYuk := ySe S ebar.e + ySmu S mubar.mu;
+
+LScalar = LScalarKinetic + LYuk;
+
+LScalarTot = LQED + LScalar;

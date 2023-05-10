@@ -1,0 +1,115 @@
+(***************************************************************************************************************)
+(******                       This is the FeynRules mod-file for a nuclide, N,  interacting with a photon                       ******)
+(******                                                                                                   ******)
+(******     Authors: S. Alipour-fard                                                     ******)
+(***************************************************************************************************************)
+
+
+(* ************************** *)
+(* *****  Information   ***** *)
+(* ************************** *)
+M$ModelName = "Beam Dump Nuclide";
+
+M$Information = {
+  Authors      -> {"S. Alipour-fard"},
+  Emails       -> {"samuelaf@mit.edu"}
+};
+
+
+(* ************************** *)
+(* *****   Parameters   ***** *)
+(* ************************** *)
+FeynmanGauge = True;
+
+M$Parameters = {
+  ee == {
+    ParameterType    -> External,
+    InteractionOrder -> {QED,1},
+    TeX              -> e,
+    Description      -> "Electric coupling constant"
+  },
+  FFnuclidescalar == {
+    ParameterType -> External,
+    InteractionOrder -> {Nuclear,1},
+    TeX           -> Subscript[F, scalar],
+    Description   -> "A form factor modifying the effective charge for the ``scalar-like'' nuclide-photon interaction."
+  },
+  FFnuclidefermion == {
+    ParameterType -> External,
+    InteractionOrder -> {Nuclear,1},
+    TeX           -> Subscript[F, fermion],
+    Description   -> "A form factor modifying the effective charge for the ``fermion-like'' nuclide-photon interaction."
+  }
+};
+
+
+(* ************************** *)
+(* *****  Gauge groups  ***** *)
+(* ************************** *)
+M$GaugeGroups = {
+  U1EM  == {
+    Abelian          -> True,
+    CouplingConstant -> ee,
+    GaugeBoson       -> A,
+    Charge           -> Q
+  }
+};
+
+
+(* ************************** *)
+(* **** Particle classes **** *)
+(* ************************** *)
+M$ClassesDescription = {
+(* Gauge bosons: physical vector fields *)
+  V[1] == {
+    ClassName       -> A,
+    SelfConjugate   -> True,
+    Mass            -> 0,
+    PDG             -> 22,
+	PropagatorLabel  -> "gamma",
+    PropagatorType  -> W,
+    PropagatorArrow -> None,
+    FullName        -> "Photon"
+  },
+
+(* Scalars: Nuclide Piece *)
+  S[9] == {
+    ClassName        -> Ns,
+    SelfConjugate    -> False,
+	Mass             -> Mi,
+    Width            -> 0,
+    QuantumNumbers   -> {Q -> FFnuclidescalar},
+    PropagatorLabel  -> "Nscalar",
+	PropagatorType -> ScalarDash,
+    PropagatorArrow  -> Forward,
+    ParticleName     -> "Ns",
+    PDG             -> 994,
+    FullName         -> "Scalar Nuclide"
+  },
+
+(* Fermions: Nuclide piece *)
+  F[9] == {
+    ClassName        -> Nf,
+    SelfConjugate    -> False,
+	Mass             -> Mi,
+    Width            -> 0,
+    QuantumNumbers   -> {Q -> FFnuclidefermion},
+    PropagatorLabel  -> "Nfermion",
+    PropagatorType   -> Straight,
+    PropagatorArrow  -> Forward,
+    ParticleName     -> "Nf",
+    PDG             -> 995,
+    FullName         -> "Fermionic Nuclide"
+  }
+};
+
+
+(* ************************** *)
+(* *****   Lagrangian   ***** *)
+(* ************************** *)
+LEM := -1/4 FS[A,mu,nu] FS[A,mu,nu];
+
+LNf := I Nfbar.Ga[mu].DC[Nf, mu] - Mi Nfbar[s].Nf[s];
+LNs := DC[Nsbar, mu] DC[Ns, mu] - Mi^2 Nsbar Ns;
+
+LNuclide = LNf + LNs;

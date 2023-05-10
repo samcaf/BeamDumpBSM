@@ -1,0 +1,94 @@
+(***************************************************************************************************************)
+(******                       This is the FeynRules mod-file for QED with electrons and muons.                       ******)
+(******                                                                                                   ******)
+(******     Authors: S. Alipour-fard                                                     ******)
+(***************************************************************************************************************)
+
+
+(* ************************** *)
+(* *****  Information   ***** *)
+(* ************************** *)
+M$ModelName = "QED ";
+
+M$Information = {
+  Authors      -> {"S. Alipour-fard"},
+  Emails       -> {"samuelaf@mit.edu"}
+};
+
+
+(* ************************** *)
+(* *****   Parameters   ***** *)
+(* ************************** *)
+FeynmanGauge = True;
+
+IndexRange[Index[Generation]] = Range[2];
+IndexStyle[Generation, f];
+
+
+M$Parameters = {
+  ee == {
+    ParameterType    -> Internal,
+    InteractionOrder -> {QED,1},
+    TeX              -> e,
+    Description      -> "Electric coupling constant"
+  }
+};
+
+
+(* ************************** *)
+(* *****  Gauge groups  ***** *)
+(* ************************** *)
+M$GaugeGroups = {
+  U1EM  == {
+    Abelian          -> True,
+    CouplingConstant -> ee,
+    GaugeBoson       -> A,
+    Charge           -> Q
+  }
+};
+
+
+(* ************************** *)
+(* **** Particle classes **** *)
+(* ************************** *)
+M$ClassesDescription = {
+(* Gauge bosons: physical vector fields *)
+  V[1] == {
+    ClassName       -> A,
+    SelfConjugate   -> True,
+    Mass            -> 0,
+    PDG             -> 22,
+	PropagatorLabel  -> "gamma",
+    PropagatorType  -> W,
+    PropagatorArrow -> None,
+    FullName        -> "Photon"
+  },
+
+(* Fermions: physical fields *)
+  F[1] == {
+    ClassName        -> l,
+    ClassMembers     -> {e, mu},
+    SelfConjugate    -> False,
+	Indices          -> {Index[Generation]},
+    FlavorIndex      -> Generation,
+	Mass             -> {Ml, {mel, 5.11*^-4}, {mmu, 0.10566}},
+    Width            -> 0,
+    QuantumNumbers   -> {Q -> -1},
+    PropagatorLabel  -> {"l", "e", "mu"},
+    PropagatorType   -> Straight,
+    PropagatorArrow  -> Forward,
+    PDG              -> {11, 13},
+    ParticleName     -> {"e-", "mu-"},
+    AntiParticleName -> {"e+", "mu+"},
+    FullName         -> {"Electron", "Muon"}
+  }
+};
+
+
+(* ************************** *)
+(* *****   Lagrangian   ***** *)
+(* ************************** *Fermion)
+LEM := -1/4 FS[A,mu,nu] FS[A,mu,nu];
+LFermion := I lbar.Ga[mu].DC[l, mu] - Ml[iflav] lbar[s, iflav].l[s, iflav];
+
+LQED := LEM + LFermion;

@@ -1,0 +1,282 @@
+(***************************************************************************************************************)
+(******   FeynRules model file for several BSM particles interacting with SM leptons and nuclear targets  ******)
+(******   via an intermediate QED interaction.                                                            ******)
+(******                                                                                                   ******)
+(******     Authors: S. Alipour-fard                                                                      ******)
+(***************************************************************************************************************)
+
+
+(* ************************** *)
+(* *****  Information   ***** *)
+(* ************************** *)
+M$ModelName = "BSM Beam Dump";
+
+M$Information = {
+  Authors      -> {"S. Alipour-fard"},
+  Emails       -> {"samuelaf@mit.edu"},
+  Institutions -> {"Massachusetts Institute of Technology"},
+  Version -> "1.0"
+};
+
+
+(* ************************** *)
+(* *****   Parameters   ***** *)
+(* ************************** *)
+FeynmanGauge = True;
+
+IndexRange[Index[Generation]] = Range[2];
+IndexStyle[Generation, f];
+
+
+M$Parameters = {
+  (* Standard Model Parameters *)
+   alphaEM == {
+    ParameterType    -> External,
+    InteractionOrder -> {QED,1},
+    TeX              -> Subscript[α, EM],
+    Description      -> "Fine structure constant"
+  },
+  ee == {
+    ParameterType    -> Internal,
+    InteractionOrder -> {QED,1},
+    TeX              -> e,
+    Value            -> Sqrt[4 Pi alphaEM],
+    Description      -> "Electric coupling constant"
+  },
+
+  (* BSM Parameters *)
+  ySe == {
+    ParameterType -> External,
+    InteractionOrder -> {BSM,1},
+    TeX           -> Subscript[y, e],
+    Description   -> "Yukawa coupling between S and the electron."
+  },
+  ySmu == {
+    ParameterType -> External,
+    InteractionOrder -> {BSM,1},
+    TeX           -> Subscript[y, μ],
+    Description   -> "Yukawa coupling between S and the muon."
+  },
+  yphie == {
+    ParameterType -> External,
+    InteractionOrder -> {BSM,1},
+    TeX           -> Subscript[y, e],
+    Description   -> "Pseudo-Yukawa coupling between phi and the electron."
+  },
+  yphimu == {
+    ParameterType -> External,
+    InteractionOrder -> {BSM,1},
+    TeX           -> Subscript[y, μ],
+    Description   -> "Pseudo-Yukawa coupling between phi and the muon."
+  },
+  gPrimakoff == {
+    ParameterType -> External,
+    InteractionOrder -> {BSM,1},
+    TeX           -> Subscript[g, P],
+    Description   -> "Primakoff-type coupling between phi and the photon."
+  },
+  gVel == {
+    ParameterType -> External,
+    InteractionOrder -> {BSM,1},
+    TeX           -> Subscript[g, e],
+    Description   -> "Coupling between V and the electron."
+  },
+  gVmu == {
+    ParameterType -> External,
+    InteractionOrder -> {BSM,1},
+    TeX           -> Subscript[g, μ],
+    Description   -> "Coupling between V and the muon."
+  },
+  gUel == {
+    ParameterType -> External,
+    InteractionOrder -> {BSM,1},
+    TeX           -> Subscript[g, e],
+    Description   -> "Coupling between U and the electron."
+  },
+  gUmu == {
+    ParameterType -> External,
+    InteractionOrder -> {BSM,1},
+    TeX           -> Subscript[g, μ],
+    Description   -> "Coupling between U and the muon."
+  }
+};
+
+
+(* ************************** *)
+(* *****  Gauge groups  ***** *)
+(* ************************** *)
+M$GaugeGroups = {
+  U1EM  == {
+    Abelian          -> True,
+    CouplingConstant -> ee,
+    GaugeBoson       -> A,
+    Charge           -> Q
+  }
+};
+
+
+(* ************************** *)
+(* **** Particle classes **** *)
+(* ************************** *)
+M$ClassesDescription = {
+(* SM Photon *)
+  V[1] == {
+    ClassName       -> A,
+    SelfConjugate   -> True,
+    Mass            -> 0,
+    PDG             -> 22,
+    PropagatorLabel  -> "γ",
+    PropagatorType  -> W,
+    PropagatorArrow -> None,
+    TeXParticleName    -> "γ",
+    FullName        -> "Photon"
+  },
+
+  (* SM Leptons *)
+  F[1] == {
+    ClassName        -> l,
+    ClassMembers     -> {e, mu},
+    SelfConjugate    -> False,
+    Indices          -> {Index[Generation]},
+    FlavorIndex      -> Generation,
+    Mass             -> {Ml, {mel, 5.11*^-4}, {mmu, 0.10566}},
+    Width            -> 0,
+    QuantumNumbers   -> {Q -> -1},
+    PropagatorLabel  -> {"l", "e", "μ"},
+    PropagatorType   -> Straight,
+    PropagatorArrow  -> Forward,
+    PDG              -> {11, 13},
+    TeXParticleName  -> {"Superscript[e,-]", "Superscript[μ,-]"},
+    TeXAntiParticleName -> {"Superscript[e,+]", "Superscript[μ,+]"},
+    FullName         -> {"Electron", "Muon"}
+  },
+
+  (* Nuclide Pieces *)
+  S[9] == {
+    ClassName        -> Ns,
+    SelfConjugate    -> False,
+    Mass             -> Mi,
+    Width            -> 0,
+    QuantumNumbers   -> {Q -> 1},
+    PropagatorLabel  -> "N (scalar)",
+    PropagatorType   -> ScalarDash,
+    PropagatorArrow  -> Forward,
+    TeXParticleName  -> "Subscript[N,S]",
+    PDG              -> 994,
+    FullName         -> "Scalar Nuclide"
+  },
+  F[9] == {
+    ClassName        -> Nf,
+    SelfConjugate    -> False,
+    Mass             -> Mi,
+    Width            -> 0,
+    QuantumNumbers   -> {Q -> 1},
+    PropagatorLabel  -> "N (fermion)",
+    PropagatorType   -> Straight,
+    PropagatorArrow  -> Forward,
+    TeXParticleName  -> "Subscript[N,f]",
+    PDG              -> 995,
+    FullName         -> "Fermionic Nuclide"
+  },
+
+
+  (* BSM Scalar *)
+  S[11] == {
+    ClassName       -> S,
+    SelfConjugate   -> True,
+    Mass            -> mS,
+    Width           -> 0,
+    PropagatorLabel -> "S",
+    PropagatorType  -> D,
+    PropagatorArrow -> None,
+    PDG             -> 996,
+    TeXParticleName -> "S",
+    FullName        -> "BSM Scalar"
+  },
+  (* BSM Pseudo-Scalar *)
+  S[12] == {
+    ClassName       -> phi,
+    SelfConjugate   -> True,
+    Mass            -> mphi,
+    Width           -> 0,
+    PropagatorLabel -> "ϕ",
+    PropagatorType  -> D,
+    PropagatorArrow -> None,
+    PDG             -> 997,
+    TeXParticleName -> "ϕ",
+    FullName        -> "BSM Pseudo-Scalar"
+  },
+
+  (* BSM Vector *)
+  V[11] == {
+    ClassName       -> V,
+    SelfConjugate   -> True,
+    Mass            -> mV,
+    Width           -> 0,
+    PropagatorLabel -> "",
+    PropagatorType  -> W,
+    PropagatorArrow -> None,
+    PDG             -> 998,
+    TeXParticleName -> "",
+    FullName        -> "BSM Vector"
+  },
+  (* BSM Pseudo-Vector *)
+  V[12] == {
+    ClassName       -> U,
+    SelfConjugate   -> True,
+    Mass            -> mU,
+    Width           -> 0,
+    PropagatorLabel -> "",
+    PropagatorType  -> W,
+    PropagatorArrow -> None,
+    PDG             -> 999,
+    TeXParticleName -> "",
+    FullName        -> "BSM Pseudo-Vector"
+  }
+};
+
+
+(* ************************** *)
+(* *****   Lagrangian   ***** *)
+(* ************************** *)
+(* QED *)
+LEM := -1/4 FS[A,mu,nu] FS[A,mu,nu];
+(* LLepton := I lbar.Ga[mu].DC[l, mu] - Ml[iflav] lbar[s, iflav].l[s, iflav];*)
+LElectron := I ebar.Ga[mu].DC[e, mu] - mel ebar.e
+LMuon := I mubar.Ga[mu].DC[mu, mu] - mmu mubar.mu
+LQED := LEM + LElectron + LMuon;
+
+(* Nuclear *)
+LNf := I Nfbar.Ga[mu].DC[Nf, mu] - Mi Nfbar[s].Nf[s];
+LNs := DC[Nsbar, mu] DC[Ns, mu] - Mi^2 Nsbar Ns;
+
+LNuclide = LNf + LNs;
+
+(* BSM *)
+LScalarKinetic := Block[{mu}, ExpandIndices[1/2 del[S, mu] del[S, mu] - 1/2 mS^2*S^2]];
+LYuk := ySe S ebar.e + ySmu S mubar.mu;
+
+LScalar = LScalarKinetic + LYuk;
+
+
+LPseudoScalarKinetic := Block[{mu}, ExpandIndices[1/2 del[phi, mu] del[phi, mu] - 1/2 mphi^2*phi^2]];
+LPseudoYuk := yphie phi ebar.Ga[5].e + yphimu phi mubar.Ga[5].mu;
+LPrimakoff := gPrimakoff phi Eps[mu, nu, rho, sigma] FS[A, mu, nu] FS[A, rho, sigma];
+(* Primakoff couplings are not working in FeynArts -- reason enough to investigate before implementing *)
+
+LPseudoScalar := LPseudoScalarKinetic + LPseudoYuk;
+
+
+LVectorKinetic :=  -1/4 FS[V,mu,nu] FS[V,mu,nu] + 1/2 mV^2 V[mu] V[mu];
+LVectorCoupling := -I gVel ebar.Ga[nu].e V[nu] - I gVmu mubar.Ga[nu].mu V[nu];
+
+LVector := LVectorKinetic + LVectorCoupling;
+
+
+LPseudoVectorKinetic :=  -1/4 FS[U,mu,nu] FS[U,mu,nu] + 1/2 mU^2 U[mu] U[mu];
+LPseudoVectorCoupling := -I gUel ebar.Ga[nu].Ga[5].e U[nu] - I gUmu mubar.Ga[nu].Ga[5].mu U[nu];
+
+LPseudoVector := LPseudoVectorKinetic + LPseudoVectorCoupling
+
+(* Combining All *)
+LBeamDump := LQED + LNuclide + LScalar + LPseudoScalar + LVector + LPseudoVector;

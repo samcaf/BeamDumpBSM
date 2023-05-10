@@ -1,0 +1,136 @@
+(***************************************************************************************************************)
+(******                       This is the FeynRules mod-file for a pseudo-scalar, phi, interacting with a muon                       ******)
+(******                                                                                                   ******)
+(******     Authors: S. Alipour-fard                                                     ******)
+(***************************************************************************************************************)
+
+
+(* ************************** *)
+(* *****  Information   ***** *)
+(* ************************** *)
+M$ModelName = "Beam Dump Pseudo-Scalar";
+
+M$Information = {
+  Authors      -> {"S. Alipour-fard"},
+  Emails       -> {"samuelaf@mit.edu"}
+};
+
+
+(* ************************** *)
+(* *****   Parameters   ***** *)
+(* ************************** *)
+FeynmanGauge = True;
+
+IndexRange[Index[Generation]] = Range[2];
+IndexStyle[Generation, f];
+
+
+M$Parameters = {
+  ee == {
+    ParameterType    -> Internal,
+    InteractionOrder -> {QED,1},
+    TeX              -> e,
+    Description      -> "Electric coupling constant"
+  },
+  yphie == {
+    ParameterType -> External,
+    InteractionOrder -> {BSM,1},
+    TeX           -> Subscript[y, e],
+    Description   -> "Yukawa coupling between phi and the electron."
+  },
+  yphimu == {
+    ParameterType -> External,
+    InteractionOrder -> {BSM,1},
+    TeX           -> Subscript[y, mu],
+    Description   -> "Yukawa coupling between phi and the muon."
+  },
+  gPrimakoff == {
+    ParameterType -> External,
+    InteractionOrder -> {BSM,1},
+    TeX           -> Subscript[g, P],
+    Description   -> "Primakoff-type coupling between phi and the photon."
+  }
+};
+
+
+(* ************************** *)
+(* *****  Gauge groups  ***** *)
+(* ************************** *)
+M$GaugeGroups = {
+  U1EM  == {
+    Abelian          -> True,
+    CouplingConstant -> ee,
+    GaugeBoson       -> A,
+    Charge           -> Q
+  }
+};
+
+
+(* ************************** *)
+(* **** Particle classes **** *)
+(* ************************** *)
+M$ClassesDescription = {
+(* Gauge bosons: physical vector fields *)
+  V[1] == {
+    ClassName       -> A,
+    SelfConjugate   -> True,
+    Mass            -> 0,
+    PDG             -> 22,
+	PropagatorLabel  -> "gamma",
+    PropagatorType  -> W,
+    PropagatorArrow -> None,
+    FullName        -> "Photon"
+  },
+  (* May want to add Z boson *)
+
+(* Fermions: physical fields *)
+  F[1] == {
+    ClassName        -> l,
+    ClassMembers     -> {e, mu},
+    SelfConjugate    -> False,
+	Indices          -> {Index[Generation]},
+    FlavorIndex      -> Generation,
+	Mass             -> {Ml, {mel, 5.11*^-4}, {mmu, 0.10566}},
+    Width            -> 0,
+    QuantumNumbers   -> {Q -> -1},
+    PropagatorLabel  -> {"l", "e", "mu"},
+    PropagatorType   -> Straight,
+    PropagatorArrow  -> Forward,
+    PDG              -> {11, 13},
+    ParticleName     -> {"e-", "mu-"},
+    AntiParticleName -> {"e+", "mu+"},
+    FullName         -> {"Electron", "Muon"}
+  },
+
+(* BSM Pseudo-Scalar *)
+  S[1] == {
+    ClassName       -> phi,
+    SelfConjugate   -> True,
+    Mass            -> {mS, 1000},
+    Width           -> 0,
+    PropagatorLabel -> "phi",
+    PropagatorType  -> D,
+    PropagatorArrow -> None,
+    PDG             -> 997,
+    ParticleName    -> "phi",
+    FullName        -> "BSM Pseudo-Scalar"
+  }
+};
+
+
+(* ************************** *)
+(* *****   Lagrangian   ***** *)
+(* ************************** *)
+LQED := -1/4 FS[A,mu,nu] FS[A,mu,nu] + I lbar.Ga[mu].DC[l, mu] - Ml[iflav] lbar[s, iflav].l[s, iflav];
+
+LPseudoScalarKinetic := Block[{mu},
+  ExpandIndices[1/2 del[phi, mu] del[phi, mu] - 1/2 mphi^2*phi^2]];
+
+LPseudoYuk := yphie phi ebar.Ga[5].e + yphimu phi mubar.Ga[5].mu;
+
+LPrimakoff := gPrimakoff phi Eps[mu, nu, rho, sigma] FS[A, mu, nu] FS[A, rho, sigma];
+(* Primakoff couplings are not working in FeynArts -- reason enough to investigate before implementing *)
+
+LPseudoScalar := LPseudoScalarKinetic + LPseudoYuk;
+
+LPseudoScalarTot = LQED + LPseudoScalar+ LPrimakoff;
