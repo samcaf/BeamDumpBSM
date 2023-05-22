@@ -6,7 +6,6 @@ UFO_DIR = BEAMDUMP_DIR + 'FeynRules/UFO_output/'
 VERTEX_FILE = UFO_DIR + 'combined_beamdump/vertices.py'
 
 
-
 def get_vertex(filename, particle_names, multiplicities,
                convert_to_formfactor=True):
     """Get the lines associated with a given vertex in a
@@ -73,8 +72,8 @@ def vertex_to_formfactor(vertex):
 
 if __name__ == "__main__":
     vertex_VSS = get_vertex(VERTEX_FILE, ['A', 'Ns'], [1, 2])
-    print(vertex_VSS)
+    # print(vertex_VSS)
     vertex_VVSS = get_vertex(VERTEX_FILE, ['A', 'Ns'], [2, 2])
-    print(vertex_VVSS)
+    # print(vertex_VVSS)
     vertex_FFV = get_vertex(VERTEX_FILE, ['A', 'Nf'], [1, 2])
-    print(vertex_FFV)
+    # print(vertex_FFV)

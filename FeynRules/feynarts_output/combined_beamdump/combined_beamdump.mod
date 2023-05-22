@@ -56,7 +56,7 @@ S[1] == {
     QuantumNumbers -> {Q},
     PropagatorType -> ScalarDash,
     PropagatorArrow -> Forward,
-    Mass -> Mi,
+    Mass -> Mns,
     Indices -> {},
     PropagatorLabel -> "Ns" },
 
@@ -65,7 +65,7 @@ F[3] == {
     QuantumNumbers -> {Q},
     PropagatorType -> Straight,
     PropagatorArrow -> Forward,
-    Mass -> Mi,
+    Mass -> Mnf,
     Indices -> {},
     PropagatorLabel -> "Nf" },
 
@@ -114,7 +114,8 @@ GaugeXi[ V[3] ] = GaugeXi[V[12]];
 
 mel[ ___ ] := mel;
 mmu[ ___ ] := mmu;
-Mi[ ___ ] := Mi;
+Mns[ ___ ] := Mns;
+Mnf[ ___ ] := Mnf;
 mS[ ___ ] := mS;
 mphi[ ___ ] := mphi;
 mV[ ___ ] := mV;

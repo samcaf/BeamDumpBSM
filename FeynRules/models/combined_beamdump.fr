@@ -124,38 +124,39 @@ M$ClassesDescription = {
     ClassName       -> A,
     SelfConjugate   -> True,
     Mass            -> 0,
+    Width           -> 0,
     PDG             -> 22,
-    PropagatorLabel  -> "γ",
+    PropagatorLabel -> "γ",
     PropagatorType  -> W,
     PropagatorArrow -> None,
-    TeXParticleName    -> "γ",
+    TeXParticleName -> "γ",
     FullName        -> "Photon"
   },
 
   (* SM Leptons *)
   F[1] == {
-    ClassName        -> l,
-    ClassMembers     -> {e, mu},
-    SelfConjugate    -> False,
-    Indices          -> {Index[Generation]},
-    FlavorIndex      -> Generation,
-    Mass             -> {Ml, {mel, 5.11*^-4}, {mmu, 0.10566}},
-    Width            -> 0,
-    QuantumNumbers   -> {Q -> -1},
-    PropagatorLabel  -> {"l", "e", "μ"},
-    PropagatorType   -> Straight,
-    PropagatorArrow  -> Forward,
-    PDG              -> {11, 13},
-    TeXParticleName  -> {"Superscript[e,-]", "Superscript[μ,-]"},
+    ClassName           -> l,
+    ClassMembers        -> {e, mu},
+    SelfConjugate       -> False,
+    Indices             -> {Index[Generation]},
+    FlavorIndex         -> Generation,
+    Mass                -> {Ml, {mel, 5.11*^-4}, {mmu, 0.10566}},
+    Width               -> 0,
+    QuantumNumbers      -> {Q -> -1},
+    PropagatorLabel     -> {"l", "e", "μ"},
+    PropagatorType      -> Straight,
+    PropagatorArrow     -> Forward,
+    PDG                 -> {11, 13},
+    TeXParticleName     -> {"Superscript[e,-]", "Superscript[μ,-]"},
     TeXAntiParticleName -> {"Superscript[e,+]", "Superscript[μ,+]"},
-    FullName         -> {"Electron", "Muon"}
+    FullName            -> {"Electron", "Muon"}
   },
 
   (* Nuclide Pieces *)
   S[9] == {
     ClassName        -> Ns,
     SelfConjugate    -> False,
-    Mass             -> Mi,
+    Mass             -> {Mns, 131},
     Width            -> 0,
     QuantumNumbers   -> {Q -> 1},
     PropagatorLabel  -> "N (scalar)",
@@ -168,7 +169,7 @@ M$ClassesDescription = {
   F[9] == {
     ClassName        -> Nf,
     SelfConjugate    -> False,
-    Mass             -> Mi,
+    Mass             -> {Mnf, 127},
     Width            -> 0,
     QuantumNumbers   -> {Q -> 1},
     PropagatorLabel  -> "N (fermion)",
@@ -184,7 +185,7 @@ M$ClassesDescription = {
   S[11] == {
     ClassName       -> S,
     SelfConjugate   -> True,
-    Mass            -> mS,
+    Mass            -> {mS, 1033},
     Width           -> 0,
     PropagatorLabel -> "S",
     PropagatorType  -> D,
@@ -197,7 +198,7 @@ M$ClassesDescription = {
   S[12] == {
     ClassName       -> phi,
     SelfConjugate   -> True,
-    Mass            -> mphi,
+    Mass            -> {mphi, 1097},
     Width           -> 0,
     PropagatorLabel -> "ϕ",
     PropagatorType  -> D,
@@ -211,7 +212,7 @@ M$ClassesDescription = {
   V[11] == {
     ClassName       -> V,
     SelfConjugate   -> True,
-    Mass            -> mV,
+    Mass            -> {mV, 1181},
     Width           -> 0,
     PropagatorLabel -> "",
     PropagatorType  -> W,
@@ -224,7 +225,7 @@ M$ClassesDescription = {
   V[12] == {
     ClassName       -> U,
     SelfConjugate   -> True,
-    Mass            -> mU,
+    Mass            -> {mU, 1103},
     Width           -> 0,
     PropagatorLabel -> "",
     PropagatorType  -> W,
@@ -247,10 +248,10 @@ LMuon := I mubar.Ga[mu].DC[mu, mu] - mmu mubar.mu
 LQED := LEM + LElectron + LMuon;
 
 (* Nuclear *)
-LNf := I Nfbar.Ga[mu].DC[Nf, mu] - Mi Nfbar[s].Nf[s];
-LNs := DC[Nsbar, mu] DC[Ns, mu] - Mi^2 Nsbar Ns;
+LNs := DC[Nsbar, mu] DC[Ns, mu] - Mns^2 Nsbar Ns;
+LNf := I Nfbar.Ga[mu].DC[Nf, mu] - Mnf Nfbar[s].Nf[s];
 
-LNuclide = LNf + LNs;
+LNuclide = LNs + LNf;
 
 (* BSM *)
 LScalarKinetic := Block[{mu}, ExpandIndices[1/2 del[S, mu] del[S, mu] - 1/2 mS^2*S^2]];

@@ -1,0 +1,1 @@
+../SubProcesses/P1_mumns_mumnsphi/maxamps.inc

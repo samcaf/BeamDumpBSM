@@ -30,10 +30,10 @@ MakeBoxes[mmu, TraditionalForm] :=
   "\(\!\(\*SubscriptBox[\(m\), \(\[Mu]\)]\)\)";
 
 MakeBoxes[Mi, TraditionalForm] := "\(\!\(\*SubscriptBox[\(M\), \(i\)]\)\)";
-MakeBoxes[MNf, TraditionalForm] :=
-  "\(\!\(\*SubscriptBox[\(M\), SubscriptBox[\(N\), \(f\)]]\)\)";
-MakeBoxes[MNs, TraditionalForm] :=
+MakeBoxes[Mns, TraditionalForm] :=
   "\(\!\(\*SubscriptBox[\(M\), SubscriptBox[\(N\), \(s\)]]\)\)";
+MakeBoxes[Mnf, TraditionalForm] :=
+  "\(\!\(\*SubscriptBox[\(M\), SubscriptBox[\(N\), \(f\)]]\)\)";
 
 MakeBoxes[mS, TraditionalForm] := "\(\!\(\*SubscriptBox[\(m\), \(S\)]\)\)";
 MakeBoxes[mphi, TraditionalForm] :=

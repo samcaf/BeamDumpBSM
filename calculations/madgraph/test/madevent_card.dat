@@ -1,0 +1,3 @@
+launch
+set nevents=100
+set mphi scan:[10, 100, 200]

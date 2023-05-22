@@ -27,7 +27,7 @@ AppendTo[$Path, $FeynRulesPath];
 
 $FeynArtsModelPath=SetDirectory[FileNameJoin[{$MathematicaPath,"Applications/FeynCalc/FeynArts/Models/"}]];
 
-$MG5Path=SetDirectory[FileNameJoin[{$SoftwarePath,"MG5_aMC_v3_4_2/"}]];
+$MG5Path=SetDirectory[FileNameJoin[{$SoftwarePath,"MG5_aMC_v3_5_0/"}]];
 $MG5ModelPath=SetDirectory[FileNameJoin[{$MG5Path, "models/"}]];
 
 
