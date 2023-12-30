@@ -1,0 +1,10 @@
+launch
+
+set nevents=50000
+
+set ebeam1=1500
+set ebeam2=10
+
+set mns=171.2
+
+set mphi scan:[0.001, 0.01, 0.1, 1, 10]

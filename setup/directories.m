@@ -58,6 +58,7 @@ $lowMassFormFactors=FileNameJoin[{$LocalFunctionPath,"lowmass_formfactors.m"}];
 $scalar2to2Functions=FileNameJoin[{$LocalFunctionPath,"scalar_2to2.m"}];
 
 $pseudoscalar2to2Functions=FileNameJoin[{$LocalFunctionPath,"pseudoscalar_2to2.m"}];
+$pseudoscalar2to3Functions=FileNameJoin[{$LocalFunctionPath,"pseudoscalar_2to3.m"}];
 
 $vector2to2Functions=FileNameJoin[{$LocalFunctionPath,"vector_2to2.m"}];
 

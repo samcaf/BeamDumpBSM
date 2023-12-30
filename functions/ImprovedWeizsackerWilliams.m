@@ -1,3 +1,5 @@
+(* ::Package:: *)
+
 allModelsIWW["pseudoscalar"]["\!\(\*FractionBox[\(1\), \
 \(\[Chi]\)]\)\!\(\*FractionBox[\(d\[Sigma]\), \(dx\)]\), approximate lower \
 bound"] = (2*alphaEM^2*E0^2*Sqrt[1 - mBSM^2/(E0^2*x^2)]*x*

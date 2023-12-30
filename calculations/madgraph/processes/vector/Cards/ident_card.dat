@@ -1,0 +1,39 @@
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c      written by the UFO converter
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+frblock 1 mdl_alphaEM
+
+frblock 2 mdl_ySe
+
+frblock 3 mdl_ySmu
+
+frblock 4 mdl_yphie
+
+frblock 5 mdl_yphimu
+
+frblock 6 mdl_gPrimakoff
+
+frblock 7 mdl_gVel
+
+frblock 8 mdl_gVmu
+
+frblock 9 mdl_gUel
+
+frblock 10 mdl_gUmu
+
+mass 11 mdl_mel
+
+mass 13 mdl_mmu
+
+mass 994 mdl_Mns
+
+mass 995 mdl_Mnf
+
+mass 996 mdl_mS
+
+mass 997 mdl_mphi
+
+mass 998 mdl_mV
+
+mass 999 mdl_mU

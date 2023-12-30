@@ -1,0 +1,10 @@
+launch
+
+set nevents=50000
+
+set ebeam1=1500
+set ebeam2=0
+
+set mns=171.2
+
+set ms scan:[0.001, 0.01, 0.1, 1, 10]

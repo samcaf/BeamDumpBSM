@@ -1,0 +1,31 @@
+#************************************************************
+#*                        MadGraph 5                        *
+#*                                                          *
+#*                *                       *                 *
+#*                  *        * *        *                   *
+#*                    * * * * 5 * * * *                     *
+#*                  *        * *        *                   *
+#*                *                       *                 *
+#*                                                          *
+#*                                                          *
+#*    The MadGraph Development Team - Please visit us at    *
+#*    https://server06.fynu.ucl.ac.be/projects/madgraph     *
+#*                                                          *
+#************************************************************
+#*                                                          *
+#*               Command File for MadGraph 5                *
+#*                                                          *
+#*     run as ./bin/mg5  filename                           *
+#*                                                          *
+#************************************************************
+# Import beam-dump BSM models
+import model combined_beamdump
+
+# Specify process(es) to run
+generate mu- ns > mu- ns u
+
+# Output processes to MadEvent directory
+output /Users/sam/Documents/Research/BeamDumpBSM/calculations/madgraph/processes/pseudovector2to3
+
+# To generate events, you can go to the created directory and
+# run ./bin/generate_events
